@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="sorttype">
+        <item>popularity</item>
+        <item>vote_average</item>
+        <item>favourite</item>
+    </array>
+</resources>

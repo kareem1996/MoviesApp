@@ -1,6 +1,5 @@
 package com.kareem.moviesapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -16,10 +15,10 @@ public class settings extends PreferenceActivity implements Preference.OnPrefere
     public void onCreate(Bundle b){
         super.onCreate(b);
         addPreferencesFromResource(R.xml.preferneces);
-        addlistenertopreference(findPreference("sorttype"));
+        addListenerToPreference(findPreference("sorttype"));
     }
-    public void addlistenertopreference(Preference preference){
-        //set listener to each preference
+    public void addListenerToPreference(Preference preference){
+        //set Listener to each preference
         preference.setOnPreferenceChangeListener(this);
         //call it for once to set the sumary
         onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(),""));

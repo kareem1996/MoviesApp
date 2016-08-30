@@ -8,7 +8,7 @@
     android:padding="10dp"
     android:clipChildren="false"
     android:orientation="vertical"
-    tools:context="com.kareem.moviesapp.Details">
+    tools:context="com.kareem.moviesapp.DetailsActivity">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

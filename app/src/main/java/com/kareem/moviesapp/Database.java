@@ -11,21 +11,21 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class Database extends SQLiteOpenHelper {
     //database class responsible for storing data in table with columns(id,title,summary,releaseDate,rate,posterImg)
 
-    static final int DatabaseVersion = 1;
+    private static final int DatabaseVersion = 1;
 
     //database file Name
-    static final String DatabaseName = "MyFavourites";
+    private static final String DatabaseName = "MyFavourites";
 
     //database table
-    static final String TableName = "favourites";
+    public static final String TableName = "favourites";
 
     //columns for the database table
-    static final String ID = "id";
-    static final String Title = "title";
-    static final String Summary = "summary";
-    static final String ReleaseDate = "release";
-    static final String Rate = "rate";
-    static final String Poster = "poster";
+    public static final String ID = "id";
+    public static final String Title = "title";
+    public static final String Summary = "summary";
+    public static final String ReleaseDate = "release";
+    public static final String Rate = "rate";
+    public static final String Poster = "poster";
 
 //command that is responsible for creating the table with appropriate columns
     static final String CreateTable = "CREATE TABLE IF NOT EXISTS " + TableName + " ("

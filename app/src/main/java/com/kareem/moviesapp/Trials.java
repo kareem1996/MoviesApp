@@ -14,9 +14,9 @@ import android.widget.ListView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class Trials extends AppCompatActivity implements AdapterView.OnItemClickListener, listener {
+public class Trials extends AppCompatActivity implements AdapterView.OnItemClickListener, Listener {
     ListView trials;
-    Results r;
+    MovieUnit r;
     ProgressDialog dialog;
     Uri[] uris;
 
@@ -27,7 +27,7 @@ public class Trials extends AppCompatActivity implements AdapterView.OnItemClick
         dialog = new ProgressDialog(this);
         dialog.setMessage("Loading...");
         trials = (ListView) findViewById(R.id.trailers);
-        r = (Results) this.getIntent().getSerializableExtra("Results");
+        r = (MovieUnit) this.getIntent().getSerializableExtra("MovieUnit");
         organizer(new Builder(r.getId(), "videos").trials());
     }
 

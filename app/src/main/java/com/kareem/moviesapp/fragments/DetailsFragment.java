@@ -1,4 +1,4 @@
-package com.kareem.moviesapp;
+package com.kareem.moviesapp.fragments;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -17,6 +17,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.kareem.moviesapp.Converter;
+import com.kareem.moviesapp.Database;
+import com.kareem.moviesapp.MovieUnit;
+import com.kareem.moviesapp.R;
+import com.kareem.moviesapp.Reviews;
+import com.kareem.moviesapp.Trials;
 import com.squareup.picasso.Picasso;
 
 import static com.kareem.moviesapp.Database.ID;
@@ -32,7 +38,7 @@ import static com.kareem.moviesapp.Database.Title;
  */
 
 public class DetailsFragment extends Fragment {
-    Results r;
+    MovieUnit r;
     ImageView poster, backdrop;
     TextView title, summary, date, rate;
     Button reviews, trials, addToFavourite;
@@ -52,11 +58,11 @@ public class DetailsFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        init_variables(view);
+        initVariables(view);
         super.onViewCreated(view, savedInstanceState);
     }
 
-    public void init_variables(View v) {
+    public void initVariables(View v) {
         //to initialize required variables
         poster = (ImageView) v.findViewById(R.id.poster);
         backdrop = (ImageView) v.findViewById(R.id.backdrop);
@@ -67,7 +73,7 @@ public class DetailsFragment extends Fragment {
         reviews = (Button) v.findViewById(R.id.reviews);
         trials = (Button) v.findViewById(R.id.trials);
         addToFavourite = (Button) v.findViewById(R.id.addtofavourite);
-        r = (Results) this.getArguments().getSerializable("Results");
+        r = (MovieUnit) this.getArguments().getSerializable("MovieUnit");
         database = new Database(getContext()).getWritableDatabase();
         databaseread = new Database(getContext()).getReadableDatabase();
     }
@@ -92,7 +98,7 @@ public class DetailsFragment extends Fragment {
             if (b)
                 hideFavouriteBtn();
 
-            init_listeners();
+            initListeners();
 
             loadDataFromInternet();
         } else {
@@ -126,13 +132,13 @@ public class DetailsFragment extends Fragment {
         trials.setVisibility(View.INVISIBLE);
     }
 
-    public void init_listeners() {
+    public void initListeners() {
         //add listeners to reviews and trials
         reviews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), Reviews.class);
-                i.putExtra("Results", r);
+                i.putExtra("MovieUnit", r);
                 startActivity(i);
             }
         });
@@ -141,7 +147,7 @@ public class DetailsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getContext(), Trials.class);
-                i.putExtra("Results", r);
+                i.putExtra("MovieUnit", r);
                 startActivity(i);
             }
         });
@@ -161,7 +167,7 @@ public class DetailsFragment extends Fragment {
         //load posterImg
         byte[] array = c.getBlob(c.getColumnIndex(Poster));
         if (array.length > 0)
-            poster.setImageBitmap(new array_bitmap().convertArray(array));
+            poster.setImageBitmap(new Converter().convertArray(array));
 
         title.setText(c.getString(c.getColumnIndex(Title)));
         summary.setText(c.getString(c.getColumnIndex(Summary)));
@@ -174,7 +180,7 @@ public class DetailsFragment extends Fragment {
                 r.getRelease_date().toString(), r.getVote_average(),
 
                 //convert posterImg to byte array to be stored in database
-                new array_bitmap().convertBitMap(((BitmapDrawable) poster.getDrawable()).getBitmap()));
+                new Converter().convertBitMap(((BitmapDrawable) poster.getDrawable()).getBitmap()));
 
         //hide the (add to favourite) button
         addToFavourite.setVisibility(View.INVISIBLE);

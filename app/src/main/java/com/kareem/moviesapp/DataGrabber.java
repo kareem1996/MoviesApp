@@ -1,10 +1,7 @@
 package com.kareem.moviesapp;
 
-import android.app.Activity;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,11 +17,11 @@ import java.net.URL;
 public class DataGrabber extends AsyncTask<Void, Void, String> {
     String link = "";
     //reference to classes that could possibly call the dataGrabbing function
-    listener listener;
+    Listener Listener;
 
-    public DataGrabber(String link,listener listener) {
+    public DataGrabber(String link,Listener listener) {
         this.link = link;
-        this.listener = listener;
+        this.Listener = listener;
     }
 
     public String grabData() throws IOException {
@@ -66,14 +63,14 @@ public class DataGrabber extends AsyncTask<Void, Void, String> {
             Log.e("DataGrabbertera", io.getMessage());
             //display toast to the appropriate activity
             return null;
-//            Toast.makeText(listener.context(),"Error",Toast.LENGTH_LONG).show();
+//            Toast.makeText(Listener.context(),"Error",Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        //for triggering the correct listener in the correct class,applying open,closed principles
-        listener.listened(s);
+        //for triggering the correct Listener in the correct class,applying open,closed principles
+        Listener.listened(s);
     }
 }

@@ -22,13 +22,13 @@ import static com.kareem.moviesapp.Database.TableName;
  * Created by kareem on 7/31/2016.
  */
 
-public class MyCustomizedAdapter extends ArrayAdapter<Results> {
+public class MyCustomizedAdapter extends ArrayAdapter<MovieUnit> implements CursorInterface{
     Context myContext;
     LayoutInflater myInflater;
-    Results[] arrayOfresults;
+    MovieUnit[] arrayOfresults;
 
 
-    public MyCustomizedAdapter(Context context, int resource, Results[] results) {
+    public MyCustomizedAdapter(Context context, int resource, MovieUnit[] results) {
         super(context, resource, results);
         myContext = context;
         myInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -39,18 +39,20 @@ public class MyCustomizedAdapter extends ArrayAdapter<Results> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ImageView myImageView;
-        View myView;
         if (convertView == null) {
             //if its a new view
-            myView = myInflater.inflate(R.layout.list_of_movies, null);
-        } else {
-            //if its a reused view
-            myView = convertView;
+            convertView = myInflater.inflate(R.layout.list_of_movies, null);
         }
-        myImageView = (ImageView) myView.findViewById(R.id.imageview_list_of_movies_movie);
+        myImageView = (ImageView) convertView.findViewById(R.id.imageview_list_of_movies_movie);
         SQLiteDatabase database = new Database(myContext).getReadableDatabase();
-        Cursor c = database.rawQuery("SELECT * FROM " + TableName + " WHERE id=" + arrayOfresults[position].getId(), null);
+        new CursorGrabber(database,position,convertView,myImageView,"SELECT * FROM " + TableName + " WHERE id=" + arrayOfresults[position].getId(),MyCustomizedAdapter.this).execute();
+//        Cursor c = database.rawQuery("SELECT * FROM " + TableName + " WHERE id=" + arrayOfresults[position].getId(), null);
 
+        return convertView;
+    }
+
+    @Override
+    public void listener(Cursor c,int position,View convertView,ImageView myImageView) {
         if ((!c.moveToFirst()) || (!PreferenceManager.getDefaultSharedPreferences(myContext).getString("sorttype", "vote_average").equals("favourite"))) {
             //if id doesn`t exist or sort type isn't favourite
             //load img from the internet
@@ -60,17 +62,16 @@ public class MyCustomizedAdapter extends ArrayAdapter<Results> {
                 Picasso.with(myContext).load("http://image.tmdb.org/t/p/w342/" + string).into(myImageView);
             } else {
                 //set default img if there is no img associated with that movie
-                myImageView.setImageBitmap(BitmapFactory.decodeResource(myView.getResources(), R.mipmap.video));
+                myImageView.setImageBitmap(BitmapFactory.decodeResource(convertView.getResources(), R.mipmap.video));
             }
         } else {
             //load poster images from the stored movies
             int i = c.getColumnIndex(Poster);
             byte[] array = c.getBlob(i);
             if (array.length > 0) {
-                Bitmap b = new array_bitmap().convertArray(array);
+                Bitmap b = new Converter().convertArray(array);
                 myImageView.setImageBitmap(b);
             }
         }
-        return myView;
     }
 }

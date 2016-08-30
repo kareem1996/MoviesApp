@@ -7,22 +7,23 @@ import java.util.Date;
  * Created by kareem on 7/31/2016.
  */
 
-public class Results implements Serializable{
+public class MovieUnit implements Serializable{
     //initialize result class and its all needed values
-    String poster_path="";
-    boolean adult;
-    String overview;
-    String release_date;
-    int[] genre_ids;
-    String id;
-    String original_title;
-    String original_language;
-    String title;
-    String backdrop_path;
-    double popularity;
-    int vote_count;
-    boolean video;
-    double vote_average;
+    //declared as private for security reasons
+    private String poster_path="";
+    private boolean adult;
+    private String overview;
+    private String release_date;
+    private int[] genre_ids;
+    private String id;
+    private String original_title;
+    private String original_language;
+    private String title;
+    private String backdrop_path;
+    private double popularity;
+    private int vote_count;
+    private boolean video;
+    private double vote_average;
 
     public String getOverview() {
         return overview;
@@ -44,7 +45,7 @@ public class Results implements Serializable{
         return vote_average;
     }
 
-    public Results(String poster_path, boolean adult, String overview, String release_date, int[] genre_ids, String id, String original_title, String original_language, String title, String backdrop_path, double popularity, int vote_count, boolean video, double vote_average) {
+    public MovieUnit(String poster_path, boolean adult, String overview, String release_date, int[] genre_ids, String id, String original_title, String original_language, String title, String backdrop_path, double popularity, int vote_count, boolean video, double vote_average) {
 
         this.poster_path = poster_path;
         this.adult = adult;
@@ -63,7 +64,7 @@ public class Results implements Serializable{
 
     }
 
-    public Results(String id){
+    public MovieUnit(String id){
         this.id = id;
     }
 

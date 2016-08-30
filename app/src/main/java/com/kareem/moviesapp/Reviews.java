@@ -4,39 +4,38 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class Reviews extends AppCompatActivity implements listener {
+public class Reviews extends AppCompatActivity implements Listener {
 
     ListView reviews;
     ProgressDialog dialog;
-    Results r;
+    MovieUnit r;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reviews);
-        init_variables();
+        initVariables();
         organizer(new Builder(r.getId(), "reviews").trials());
     }
-public void init_variables(){
+public void initVariables(){
     //initialize required variables
     reviews = (ListView) findViewById(R.id.reviews);
     dialog = new ProgressDialog(this);
     dialog.setMessage("Loading...");
-    r = (Results) this.getIntent().getSerializableExtra("Results");
+    r = (MovieUnit) this.getIntent().getSerializableExtra("MovieUnit");
 }
     public void listened(String s) {
         //trigered whenever asyncTask finish its download
         try {
 
             JSONParser json = new JSONParser();
-            createAdapter(json.resultsreviewsCreator((JSONArray) json.organizeDetailedData(s).get("results")));
+            createAdapter(json.resultsReviewsCreator((JSONArray) json.organizeDetailedData(s).get("results")));
         } catch (JSONException e) {
             e.printStackTrace();
         }

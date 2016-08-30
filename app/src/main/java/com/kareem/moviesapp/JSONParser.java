@@ -39,7 +39,7 @@ public class JSONParser {
         return map;
     }
 
-    public Results resultCreator(JSONArray dataArray, int position) throws JSONException, ParseException {
+    public MovieUnit resultCreator(JSONArray dataArray, int position) throws JSONException, ParseException {
         //create object results from an array with specific position
         JSONObject oneResult = new JSONObject(dataArray.get(position).toString());
         String date = null;
@@ -60,10 +60,10 @@ public class JSONParser {
                     }
                 }
             }
-            Results result = new Results(oneResult.getString("poster_path"), oneResult.getBoolean("adult"), oneResult.getString("overview"), date, arrayOfInts, oneResult.getString("id"), oneResult.getString("original_title"), oneResult.getString("original_language"), oneResult.getString("title"), oneResult.getString("backdrop_path"), oneResult.getDouble("popularity"), oneResult.getInt("vote_count"), oneResult.getBoolean("video"), oneResult.getDouble("vote_average"));
+            MovieUnit result = new MovieUnit(oneResult.getString("poster_path"), oneResult.getBoolean("adult"), oneResult.getString("overview"), date, arrayOfInts, oneResult.getString("id"), oneResult.getString("original_title"), oneResult.getString("original_language"), oneResult.getString("title"), oneResult.getString("backdrop_path"), oneResult.getDouble("popularity"), oneResult.getInt("vote_count"), oneResult.getBoolean("video"), oneResult.getDouble("vote_average"));
             return result;
         } else {
-            Results result = new Results(oneResult.getString("poster_path"), oneResult.getBoolean("adult"), oneResult.getString("overview"), date, null, oneResult.getString("id"), oneResult.getString("original_title"), oneResult.getString("original_language"), oneResult.getString("title"), oneResult.getString("backdrop_path"), oneResult.getDouble("popularity"), oneResult.getInt("vote_count"), oneResult.getBoolean("video"), oneResult.getDouble("vote_average"));
+            MovieUnit result = new MovieUnit(oneResult.getString("poster_path"), oneResult.getBoolean("adult"), oneResult.getString("overview"), date, null, oneResult.getString("id"), oneResult.getString("original_title"), oneResult.getString("original_language"), oneResult.getString("title"), oneResult.getString("backdrop_path"), oneResult.getDouble("popularity"), oneResult.getInt("vote_count"), oneResult.getBoolean("video"), oneResult.getDouble("vote_average"));
             return result;
         }
     }
@@ -74,9 +74,9 @@ public class JSONParser {
         return oneResult.getString("key");
     }
 
-    public Results[] resultsCreator(JSONArray dataArray) {
+    public MovieUnit[] resultsCreator(JSONArray dataArray) {
         //create an array of results
-        Results[] returned = new Results[dataArray.length()];
+        MovieUnit[] returned = new MovieUnit[dataArray.length()];
         try {
             for (int i = 0; i < dataArray.length(); i++) {
                 returned[i] = resultCreator(dataArray, i);
@@ -106,18 +106,18 @@ public class JSONParser {
         return returned;
     }
 
-    public String resultreviewsCreator(JSONArray dataArray, int position) throws JSONException, ParseException {
+    public String resultReviewsCreator(JSONArray dataArray, int position) throws JSONException, ParseException {
         //create a review for a specific postion from an array
         JSONObject oneResult = new JSONObject(dataArray.get(position).toString());
         return oneResult.getString("content");
     }
 
-    public String[] resultsreviewsCreator(JSONArray dataArray) {
+    public String[] resultsReviewsCreator(JSONArray dataArray) {
         //create an array of reviews for a specific movie
         String[] returned = new String[dataArray.length()];
         try {
             for (int i = 0; i < dataArray.length(); i++) {
-                returned[i] = resultreviewsCreator(dataArray, i);
+                returned[i] = resultReviewsCreator(dataArray, i);
             }
         } catch (JSONException e) {
             Log.e("JSONParser", "JSONException Occured while trying to Parse Data  : " + e.getMessage());

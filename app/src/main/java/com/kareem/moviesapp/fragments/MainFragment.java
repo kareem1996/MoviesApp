@@ -1,4 +1,4 @@
-package com.kareem.moviesapp;
+package com.kareem.moviesapp.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,6 +22,17 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.kareem.moviesapp.Builder;
+import com.kareem.moviesapp.DataGrabber;
+import com.kareem.moviesapp.Database;
+import com.kareem.moviesapp.DetailsActivity;
+import com.kareem.moviesapp.JSONParser;
+import com.kareem.moviesapp.Listener;
+import com.kareem.moviesapp.MovieUnit;
+import com.kareem.moviesapp.MyCustomizedAdapter;
+import com.kareem.moviesapp.R;
+import com.kareem.moviesapp.settings;
+
 import org.json.JSONArray;
 
 import java.util.ArrayList;
@@ -34,7 +45,7 @@ import static com.kareem.moviesapp.Database.TableName;
  * Created by kareem on 8/27/2016.
  */
 
-public class MainFragment extends Fragment implements listener, View.OnClickListener {
+public class MainFragment extends Fragment implements Listener, View.OnClickListener {
     Button previous;
     Button next;
     TextView pagenum;
@@ -75,7 +86,7 @@ setHasOptionsMenu(true);
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.content_main, container, false);
-        init_variables(view);
+        initVariables(view);
         callListeners();
         return view;
     }
@@ -87,7 +98,7 @@ setHasOptionsMenu(true);
 
     }
 
-    public void init_variables(View v) {
+    public void initVariables(View v) {
         //initialize essential variables
         previous = (Button) v.findViewById(R.id.previouspage);
         previous.setVisibility(View.INVISIBLE);
@@ -109,10 +120,10 @@ setHasOptionsMenu(true);
     @Override
     public void onStart() {
         super.onStart();
-        triger();
+        trigger();
     }
 
-    public void triger() {
+    public void trigger() {
         String s = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("sorttype", "favourite");
         if (!s.equals("favourite")) {
             //grab the data from the internet
@@ -125,14 +136,14 @@ setHasOptionsMenu(true);
             c.moveToFirst();
 
             if (c != null && c.getCount() > 0) {
-                ArrayList<Results> arraylist = new ArrayList<>();
+                ArrayList<MovieUnit> arraylist = new ArrayList<>();
                 int i = c.getColumnIndex(ID);
-                Results r;
+                MovieUnit r;
                 do {
-                    r = new Results(c.getString(i));
+                    r = new MovieUnit(c.getString(i));
                     arraylist.add(r);
                 } while (c.moveToNext());
-                finalizeView(arraylist.toArray(new Results[arraylist.size()]));
+                finalizeView(arraylist.toArray(new MovieUnit[arraylist.size()]));
             }
         }
     }
@@ -144,7 +155,7 @@ setHasOptionsMenu(true);
         if(info!=null&&info.isAvailable()&&info.isConnected()) {
             new DataGrabber(url, MainFragment.this).execute();
         }else{
-            force_preferences();
+            forcePreferences();
         }
     }
 
@@ -166,17 +177,17 @@ setHasOptionsMenu(true);
             JSONArray array = (JSONArray) map.get("results");
             finalizeView(parser.resultsCreator(array));
         }else{
-            force_preferences();
+            forcePreferences();
         }
     }
 
-    public void force_preferences(){
+    public void forcePreferences(){
         //if there is no connection at any point the sort type should be changed to favourite movies
         SharedPreferences manager = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = manager.edit();
         editor.putString("sorttype", "favourite");
         editor.commit();
-        triger();
+        trigger();
     }
 
     @Override
@@ -184,28 +195,28 @@ setHasOptionsMenu(true);
         return this.context();
     }
 
-    public void finalizeView(Results[] results) {
-        //view the results on the gridview and put listener to items
+    public void finalizeView(MovieUnit[] results) {
+        //view the results on the gridview and put Listener to items
         custom = new MyCustomizedAdapter(getContext(), R.layout.list_of_movies, results);
         gridview.setAdapter(custom);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Results r = custom.getItem(position);
-//                Intent i = new Intent(getContext(),Details.class);
-//                i.putExtra("Results", r);
+                MovieUnit r = custom.getItem(position);
+//                Intent i = new Intent(getContext(),DetailsActivity.class);
+//                i.putExtra("MovieUnit", r);
 //                startActivity(i);
                 Log.v("brrrrrrrrrrrr", "i am here yaaaaay");
 
                 if (getResources().getBoolean(R.bool.Tablet)) {
                     Bundle b = new Bundle();
-                    b.putSerializable("Results", r);
+                    b.putSerializable("MovieUnit", r);
                     DetailsFragment detailsFragment = new DetailsFragment();
                     detailsFragment.setArguments(b);
                     MainFragment.this.getFragmentManager().beginTransaction().add(R.id.activity_details, detailsFragment).commit();
                 }else{
-                    Intent i = new Intent(getContext(),Details.class);
-                    i.putExtra("Results", r);
+                    Intent i = new Intent(getContext(),DetailsActivity.class);
+                    i.putExtra("MovieUnit", r);
                     startActivity(i);
                 }
             }
@@ -219,7 +230,7 @@ setHasOptionsMenu(true);
                 //for handling next page call
                 String url = builder.nextPage();
                 organizer(url);
-                increasenum();
+                increaseNum();
                 pagenum.setText(num + "");
                 previous.setVisibility(View.VISIBLE);
                 break;
@@ -227,18 +238,18 @@ setHasOptionsMenu(true);
                 //for handling previous page call
                 String url1 = builder.previousPage();
                 organizer(url1);
-                decreasenum();
+                decreaseNum();
                 pagenum.setText(num + "");
                 if (num == 1)
                     previous.setVisibility(View.INVISIBLE);
                 break;
         }
     }
-    public void increasenum() {
+    public void increaseNum() {
         num++;
     }
 
-    public void decreasenum() {
+    public void decreaseNum() {
         num--;
     }
 }

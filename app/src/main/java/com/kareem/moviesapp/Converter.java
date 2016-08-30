@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
  * Created by kareem on 8/17/2016.
  */
 
-public class array_bitmap {
+public class Converter {
     //for converting img from/to byte array
     public byte[] convertBitMap(Bitmap bitmap){
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

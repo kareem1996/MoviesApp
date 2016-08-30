@@ -8,7 +8,6 @@
     android:layout_height="490px"
     android:id="@+id/imageview_list_of_movies_movie"
     android:layout_gravity="center"
-    android:src="@mipmap/video"
     android:padding="5px"
     android:background="#000"/>
 </LinearLayout>
